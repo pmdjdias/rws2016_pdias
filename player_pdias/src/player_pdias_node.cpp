@@ -470,7 +470,7 @@ namespace rws2016_pdias
                 double distance_hunter = getDistance(closest_hunter);
 
 
-                if (distance_hunter<1.0 )//&& previous_hunter==closest_hunter)
+                if (distance_hunter<1.5 )//&& previous_hunter==closest_hunter)
                 {
                     angle = angle_hunter;
                     displacement = -1.0;
@@ -491,7 +491,7 @@ namespace rws2016_pdias
                 double angle_prey = getAngle(closest_prey);
                 //double distance_prey = getDistance(closest_prey);
 
-                if (distance_hunter < 2.0 && distance_hunter > 1.0)
+                if (distance_hunter < 2.5 && distance_hunter > 1.5)
                 {
                     angle = (angle_hunter + angle_prey + M_PI)/2;
                     displacement = -1.0;
