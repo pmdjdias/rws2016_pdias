@@ -464,13 +464,13 @@ namespace rws2016_pdias
                 string closest_hunter = getNameOfClosestHunter();
                 //string closest_hunter = getNameOfClosestTeam(hunter_team);
                 //string closest_hunter = getNameOfClosestTeamBelowDistance(hunter_team,1.5);
-                ROS_INFO("Closest hunter is %s", closest_hunter.c_str());
+                //ROS_INFO("Closest hunter is %s", closest_hunter.c_str());
 
                 double angle_hunter = getAngle(closest_hunter);
                 double distance_hunter = getDistance(closest_hunter);
 
 
-                if (distance_hunter<0.5 )//&& previous_hunter==closest_hunter)
+                if (distance_hunter<1.0 )//&& previous_hunter==closest_hunter)
                 {
                     angle = angle_hunter;
                     displacement = -1.0;
@@ -482,8 +482,8 @@ namespace rws2016_pdias
                     return;
                 }
 
-                distance2hunter = distance_hunter;
-                previous_hunter = closest_hunter;
+                //distance2hunter = distance_hunter;
+                //previous_hunter = closest_hunter;
 
                 string closest_prey = getNameOfClosestPrey();
                 //string closest_prey = getNameOfClosestTeam(prey_team);
@@ -506,10 +506,17 @@ namespace rws2016_pdias
                     displacement = msg.cheetah;
                 }
                 else*/
+                /*if (distance_hunter<1.5 )//&& previous_hunter==closest_hunter)
                 {
-                     angle = angle_prey + M_PI;
-                     displacement = -1.0;
-                }
+                    angle = (angle_hunter + angle_prey+M_PI)/2;
+                    displacement = -1.0;
+                    move(displacement, angle);
+                    return;
+                }*/
+
+
+                angle = angle_prey ;
+                displacement = msg.cheetah;
 
 
                 //Step 4
