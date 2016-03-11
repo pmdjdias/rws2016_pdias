@@ -449,7 +449,7 @@ namespace rws2016_pdias
                 double distance_hunter = getDistance(closest_hunter);
 
 
-                if (distance_hunter<1.0 &&  distance_hunter<distance2hunter  && previous_hunter==closest_hunter)
+                if (distance_hunter<1.0 && previous_hunter==closest_hunter)
                 {
                     angle = angle_hunter + M_PI;
                     displacement = msg.cheetah;
@@ -474,7 +474,7 @@ namespace rws2016_pdias
 
                 //Step 2
                 double angle_prey = getAngle(closest_prey);
-                double distance_prey = getDistance(closest_prey);
+                //double distance_prey = getDistance(closest_prey);
 
                 if (distance_hunter < 2.0 && distance_hunter > 1.0)
                 {
