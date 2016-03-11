@@ -390,6 +390,25 @@ namespace rws2016_pdias
                         prey_name = t->players[i]->name;
                     }
                 }
+           }
+
+             string getNameOfClosestTeamBelowDistance(boost::shared_ptr<Team> t, double th)
+                 {
+                     double prey_dist = getDistance(*t->players[0]);
+                     string prey_name = t->players[0]->name;
+
+                     for (size_t i = 1; i < t->players.size(); ++i)
+                     {
+                         double d = getDistance(*t->players[i]);
+
+                         if (d < prey_dist) //A new minimum
+                         {
+                             prey_dist = d;
+                             prey_name = t->players[i]->name;
+                             if (d<th)
+                                 return prey_name;
+                         }
+                     }
 
                 return prey_name;
             }
@@ -414,10 +433,13 @@ namespace rws2016_pdias
                 //4. Move maximum displacement towards angle to prey (limited by min, max)
 
                 //Step 1
-                string closest_prey = getNameOfClosestPrey();
+                //string closest_prey = getNameOfClosestPrey();
+                //string closest_prey = getNameOfClosestTeam(prey_team);
+                string closest_prey = getNameOfClosestTeamBelowDistance(prey_team,1.0);
                 ROS_INFO("Closest prey is %s", closest_prey.c_str());
 
-                string closest_hunter = getNameOfClosestTeam(hunter_team);
+                //string closest_hunter = getNameOfClosestTeam(hunter_team);
+                string closest_hunter = getNameOfClosestTeamBelowDistance(hunter_team,1.5);
                 ROS_INFO("Closest hunter is %s", closest_hunter.c_str());
 
                 //Step 2
