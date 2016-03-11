@@ -275,6 +275,10 @@ namespace rws2016_pdias
             boost::shared_ptr<Team> hunter_team;
             boost::shared_ptr<Team> prey_team;
 
+            std::string previous_prey;
+            std::string previous_hunter;
+            double distance2hunter;
+
             boost::shared_ptr<ros::Subscriber> _sub;
 
             /**
@@ -375,6 +379,7 @@ namespace rws2016_pdias
                 return prey_name;
             }
 
+
            string getNameOfClosestTeam(boost::shared_ptr<Team> t)
             {
                 double prey_dist = getDistance(*t->players[0]);
@@ -425,37 +430,56 @@ namespace rws2016_pdias
             {
                 ROS_INFO("player %s received game_move msg", name.c_str());
 
+                double angle;
+                double displacement;
+
                 //I will encode a very simple hunting behaviour:
                 //
-                //1. Get closest prey name
+                //1. Get c
                 //2. Get angle to closest prey
                 //3. Compute maximum displacement
                 //4. Move maximum displacement towards angle to prey (limited by min, max)
 
                 //Step 1
+                string closest_hunter = getNameOfClosestTeam(hunter_team);
+                //string closest_hunter = getNameOfClosestTeamBelowDistance(hunter_team,1.5);
+                ROS_INFO("Closest hunter is %s", closest_hunter.c_str());
+
+                double angle_hunter = getAngle(closest_hunter);
+                double distance_hunter = getDistance(closest_hunter);
+
+
+                if (distance_hunter<1.0 &&  distance_hunter<distance2hunter  && previous_hunter==closest_hunter)
+                {
+                    angle = angle_hunter + M_PI/2;
+                    displacement = msg.cheetah;
+
+                    distance2hunter = distance_hunter;
+                    previous_hunter = closest_hunter;
+
+                    move(displacement, angle);
+                    return;
+                }
+
+                distance2hunter = distance_hunter;
+                previous_hunter = closest_hunter;
+
+
+
                 //string closest_prey = getNameOfClosestPrey();
-                //string closest_prey = getNameOfClosestTeam(prey_team);
-                string closest_prey = getNameOfClosestTeamBelowDistance(prey_team,1.0);
+                string closest_prey = getNameOfClosestTeam(prey_team);
+                //string closest_prey = getNameOfClosestTeamBelowDistance(prey_team,1.0);
                 ROS_INFO("Closest prey is %s", closest_prey.c_str());
 
-                //string closest_hunter = getNameOfClosestTeam(hunter_team);
-                string closest_hunter = getNameOfClosestTeamBelowDistance(hunter_team,1.5);
-                ROS_INFO("Closest hunter is %s", closest_hunter.c_str());
 
                 //Step 2
                 double angle_prey = getAngle(closest_prey);
-                double angle_hunter = getAngle(closest_hunter);
-
                 double distance_prey = getDistance(closest_prey);
-                double distance_hunter = getDistance(closest_hunter);
 
-                double angle;
-                double displacement;
-
-                if (distance_hunter < 1.5 && distance_hunter > 1.0)
+                if (distance_hunter < 2.0 && distance_hunter > 1.0)
                 {
                     angle = angle_hunter + M_PI/2;
-                    displacement = -0.1;
+                    displacement = -1.0;
                 }
                 else if (distance_hunter < 1.0)
                 {
