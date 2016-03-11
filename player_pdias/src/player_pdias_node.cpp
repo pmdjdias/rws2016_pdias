@@ -99,6 +99,35 @@ namespace rws2016_pdias
 
             }
 
+            double getDistance(string player_name)
+            {
+                //computing the distance
+                string first_refframe = name;
+                string second_refframe = player_name;
+
+                ros::Duration(0.01).sleep(); //To allow the listener to hear messages
+                tf::StampedTransform st; //The pose of the player
+                try{
+                    listener.lookupTransform(first_refframe, second_refframe, ros::Time(0), st);
+                }
+                catch (tf::TransformException& ex){
+                    ROS_ERROR("%s",ex.what());
+                    ros::Duration(0.1).sleep();
+                }
+
+                tf::Transform t;
+                t.setOrigin(st.getOrigin());
+                t.setRotation(st.getRotation());
+
+                double x = t.getOrigin().x();
+                double y = t.getOrigin().y();
+
+                double norm = sqrt(x*x + y*y);
+
+                return norm;
+
+            }
+
             double getAngle(string player_name)
             {
                 //computing the distance
@@ -127,6 +156,7 @@ namespace rws2016_pdias
 
             }
 
+
             /**
              * @brief returns the team to which the player belongs
              *
@@ -141,14 +171,14 @@ namespace rws2016_pdias
              */
             tf::Transform getPose(void)
             {
-                ros::Duration(0.1).sleep(); //To allow the listener to hear messages
+                ros::Duration(0.01).sleep(); //To allow the listener to hear messages
                 tf::StampedTransform st; //The pose of the player
                 try{
                     listener.lookupTransform("/map", name, ros::Time(0), st);
                 }
                 catch (tf::TransformException& ex){
                     ROS_ERROR("%s",ex.what());
-                    ros::Duration(1.0).sleep();
+                    ros::Duration(0.1).sleep();
                 }
 
                 tf::Transform t;
@@ -369,7 +399,7 @@ namespace rws2016_pdias
 
             /**
              * @brief called whenever a /game_move msg is received
-             *
+             *.
              * @param msg the msg with the animal values
              */
             void moveCallback(const rws2016_msgs::GameMove& msg)
@@ -390,29 +420,27 @@ namespace rws2016_pdias
                 string closest_hunter = getNameOfClosestTeam(hunter_team);
                 ROS_INFO("Closest hunter is %s", closest_hunter.c_str());
 
-
                 //Step 2
                 double angle_prey = getAngle(closest_prey);
                 double angle_hunter = getAngle(closest_hunter);
 
-                //double distance_prey = getDistance(closest_prey);
-                //double distance_hunter = getDistance(closest_hunter);
+                double distance_prey = getDistance(closest_prey);
+                double distance_hunter = getDistance(closest_hunter);
 
                 double angle;
                 double displacement;
 
-                //if (distance_hunter < 2.0 && distance_hunter > 1.5)
+                if (distance_hunter < 2.0 && distance_hunter > 1.5)
                 {
-                    angle = angle_prey + M_PI/2;
+                    angle = angle_hunter + M_PI/2;
                     displacement = -0.1;
                 }
-
-                //if (distance_hunter < 1.5)
+                else if (distance_hunter < 1.5)
                 {
                     angle = angle_prey + M_PI/2;
                     displacement = msg.cheetah;
                 }
-                //else if (distance_hunter>2)
+                else
                 {
                      angle = angle_prey;
                      displacement = msg.cheetah;
