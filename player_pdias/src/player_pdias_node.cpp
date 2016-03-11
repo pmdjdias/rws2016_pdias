@@ -451,7 +451,7 @@ namespace rws2016_pdias
 
                 if (distance_hunter<1.0 &&  distance_hunter<distance2hunter  && previous_hunter==closest_hunter)
                 {
-                    angle = angle_hunter + M_PI/2;
+                    angle = angle_hunter + M_PI;
                     displacement = msg.cheetah;
 
                     distance2hunter = distance_hunter;
@@ -478,12 +478,12 @@ namespace rws2016_pdias
 
                 if (distance_hunter < 2.0 && distance_hunter > 1.0)
                 {
-                    angle = angle_hunter + M_PI/2;
+                    angle = angle_hunter + M_PI;
                     displacement = -1.0;
                 }
                 else if (distance_hunter < 1.0)
                 {
-                    angle = angle_prey + M_PI/2;
+                    angle = angle_prey + M_PI;
                     displacement = msg.cheetah;
                 }
                 else
