@@ -470,7 +470,7 @@ namespace rws2016_pdias
                 double distance_hunter = getDistance(closest_hunter);
 
 
-                if (distance_hunter<1.0 )//&& previous_hunter==closest_hunter)
+                if (distance_hunter<1.5 )//&& previous_hunter==closest_hunter)
                 {
                     angle = angle_hunter;
                     displacement = -1.0;
