@@ -470,14 +470,10 @@ namespace rws2016_pdias
                 double distance_hunter = getDistance(closest_hunter);
 
 
-                if (distance_hunter<1.5 )//&& previous_hunter==closest_hunter)
+                if (distance_hunter<1.0 )//&& previous_hunter==closest_hunter)
                 {
                     angle = angle_hunter;
                     displacement = -1.0;
-
-                    distance2hunter = distance_hunter;
-                    previous_hunter = closest_hunter;
-
                     move(displacement, angle);
                     return;
                 }
@@ -495,18 +491,16 @@ namespace rws2016_pdias
                 double angle_prey = getAngle(closest_prey);
                 //double distance_prey = getDistance(closest_prey);
 
-                /*if (distance_hunter < 2.0 && distance_hunter > 1.0)
+                if (distance_hunter < 2.0 && distance_hunter > 1.0)
                 {
-                    angle = angle_hunter + M_PI;
+                    angle = (angle_hunter + angle_prey + M_PI)/2;
                     displacement = -1.0;
+                    move(displacement, angle);
+                    return;
                 }
-                else if (distance_hunter < 1.0)
-                {
-                    angle = angle_prey + M_PI;
-                    displacement = msg.cheetah;
-                }
-                else*/
-                /*if (distance_hunter<1.5 )//&& previous_hunter==closest_hunter)
+
+                /*else
+                if (distance_hunter<1.5 )//&& previous_hunter==closest_hunter)
                 {
                     angle = (angle_hunter + angle_prey+M_PI)/2;
                     displacement = -1.0;
