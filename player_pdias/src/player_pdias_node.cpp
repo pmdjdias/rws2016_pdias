@@ -77,14 +77,14 @@ namespace rws2016_pdias
                 string first_refframe = name;
                 string second_refframe = p.name;
 
-                ros::Duration(0.1).sleep(); //To allow the listener to hear messages
+                ros::Duration(0.01).sleep(); //To allow the listener to hear messages
                 tf::StampedTransform st; //The pose of the player
                 try{
                     listener.lookupTransform(first_refframe, second_refframe, ros::Time(0), st);
                 }
                 catch (tf::TransformException& ex){
                     ROS_ERROR("%s",ex.what());
-                    ros::Duration(1.0).sleep();
+                    ros::Duration(0.1).sleep();
                 }
 
                 tf::Transform t;
@@ -105,14 +105,14 @@ namespace rws2016_pdias
                 string first_refframe = name;
                 string second_refframe = player_name;
 
-                ros::Duration(0.1).sleep(); //To allow the listener to hear messages
+                ros::Duration(0.01).sleep(); //To allow the listener to hear messages
                 tf::StampedTransform st; //The pose of the player
                 try{
                     listener.lookupTransform(first_refframe, second_refframe, ros::Time(0), st);
                 }
                 catch (tf::TransformException& ex){
                     ROS_ERROR("%s",ex.what());
-                    ros::Duration(1.0).sleep();
+                    ros::Duration(0.1).sleep();
                 }
 
                 tf::Transform t;
@@ -157,7 +157,7 @@ namespace rws2016_pdias
                 return t;
             }
 
-            /**
+            /**.
              * @brief the name of the player
              */
             string name;
@@ -392,11 +392,32 @@ namespace rws2016_pdias
 
 
                 //Step 2
-                double anglep = getAngle(closest_prey);
-                double angleh = getAngle(closest_hunter);
-                double angle = anglep * 0.7 + angleh * 0.3;
-                //Step 3
-                double displacement = msg.cheetah; //I am a cat, others may choose another animal
+                double angle_prey = getAngle(closest_prey);
+                double angle_hunter = getAngle(closest_hunter);
+
+                //double distance_prey = getDistance(closest_prey);
+                //double distance_hunter = getDistance(closest_hunter);
+
+                double angle;
+                double displacement;
+
+                //if (distance_hunter < 2.0 && distance_hunter > 1.5)
+                {
+                    angle = angle_prey + M_PI/2;
+                    displacement = -0.1;
+                }
+
+                //if (distance_hunter < 1.5)
+                {
+                    angle = angle_prey + M_PI/2;
+                    displacement = msg.cheetah;
+                }
+                //else if (distance_hunter>2)
+                {
+                     angle = angle_prey;
+                     displacement = msg.cheetah;
+                }
+
 
                 //Step 4
                 move(displacement, angle);
