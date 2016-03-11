@@ -470,10 +470,10 @@ namespace rws2016_pdias
                 double distance_hunter = getDistance(closest_hunter);
 
 
-                if (distance_hunter<0.5 )//&& previous_hunter==closest_hunter)
+                if (distance_hunter<1.0 )//&& previous_hunter==closest_hunter)
                 {
                     angle = angle_hunter;
-                    displacement = -msg.cheetah;
+                    displacement = -1.0;
 
                     distance2hunter = distance_hunter;
                     previous_hunter = closest_hunter;
@@ -484,8 +484,6 @@ namespace rws2016_pdias
 
                 distance2hunter = distance_hunter;
                 previous_hunter = closest_hunter;
-
-
 
                 string closest_prey = getNameOfClosestPrey();
                 //string closest_prey = getNameOfClosestTeam(prey_team);
