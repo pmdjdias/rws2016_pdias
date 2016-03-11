@@ -507,8 +507,8 @@ namespace rws2016_pdias
                 }
                 else*/
                 {
-                     angle = angle_prey;
-                     displacement = msg.cheetah;
+                     angle = angle_prey + M_PI;
+                     displacement = -1.0;
                 }
 
 
