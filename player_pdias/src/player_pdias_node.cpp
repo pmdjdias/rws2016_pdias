@@ -276,12 +276,10 @@ namespace rws2016_pdias
             //Initialize position according to team
             ros::Duration(0.5).sleep(); //sleep to make sure the time is correct
             tf::Transform t;
-            srand((unsigned)time(NULL)); // To start the player in a random location
+            srand((unsigned)time(0)*1000); // To start the player in a random location
             double X=((((double)rand()/(double)RAND_MAX) ) * 2 -1) * 5 ;
             double Y=((((double)rand()/(double)RAND_MAX) ) * 2 -1) * 5 ;
             //ROS_INFO("name pos %f,%f", X, Y);
-            X=1;
-            Y=1;
             t.setOrigin( tf::Vector3(X, Y, 0.0) );
             tf::Quaternion q; q.setRPY(0, 0, 0);
             t.setRotation(q);
@@ -293,7 +291,7 @@ namespace rws2016_pdias
 
         }
 
-            /**
+            /**        //ros::spinOnce();
              * @brief Moves MyPlayer
              *
              * @param displacement the liner movement of the player, bounded by [-0.1, 1]
@@ -305,7 +303,7 @@ namespace rws2016_pdias
                 double max_d =  1;
                 displacement = (displacement > max_d ? max_d : displacement);
 
-                double min_d =  -0.1;
+                double min_d =   -0.1;
                 displacement = (displacement < min_d ? min_d : displacement);
 
                 double max_t =  (M_PI/30);
@@ -333,7 +331,7 @@ namespace rws2016_pdias
                 double prey_dist = getDistance(*prey_team->players[0]);
                 string prey_name = prey_team->players[0]->name;
 
-                for (size_t i = 1; i < prey_team->players.size(); ++i)
+                for (size_t i  = 1; i < prey_team->players.size(); ++i)
                 {
                     double d = getDistance(*prey_team->players[i]);
 
@@ -346,6 +344,27 @@ namespace rws2016_pdias
 
                 return prey_name;
             }
+
+           string getNameOfClosestTeam(boost::shared_ptr<Team> t)
+            {
+                double prey_dist = getDistance(*t->players[0]);
+                string prey_name = t->players[0]->name;
+
+                for (size_t i = 1; i < t->players.size(); ++i)
+                {
+                    double d = getDistance(*t->players[i]);
+
+                    if (d < prey_dist) //A new minimum
+                    {
+                        prey_dist = d;
+                        prey_name = t->players[i]->name;
+                    }
+                }
+
+                return prey_name;
+            }
+
+
 
 
             /**
@@ -368,16 +387,19 @@ namespace rws2016_pdias
                 string closest_prey = getNameOfClosestPrey();
                 ROS_INFO("Closest prey is %s", closest_prey.c_str());
 
-                //Step 2
-                double angle = getAngle(closest_prey);
+                string closest_hunter = getNameOfClosestTeam(hunter_team);
+                ROS_INFO("Closest hunter is %s", closest_hunter.c_str());
 
+
+                //Step 2
+                double anglep = getAngle(closest_prey);
+                double angleh = getAngle(closest_hunter);
+                double angle = anglep * 0.7 + angleh * 0.3;
                 //Step 3
-                double displacement = msg.cat; //I am a cat, others may choose another animal
+                double displacement = msg.cheetah; //I am a cat, others may choose another animal
 
                 //Step 4
                 move(displacement, angle);
-                move(0.1, 0);
-
 
             }
 
