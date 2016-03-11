@@ -430,12 +430,12 @@ namespace rws2016_pdias
                 double angle;
                 double displacement;
 
-                if (distance_hunter < 2.0 && distance_hunter > 1.5)
+                if (distance_hunter < 1.5 && distance_hunter > 1.0)
                 {
                     angle = angle_hunter + M_PI/2;
                     displacement = -0.1;
                 }
-                else if (distance_hunter < 1.5)
+                else if (distance_hunter < 1.0)
                 {
                     angle = angle_prey + M_PI/2;
                     displacement = msg.cheetah;
