@@ -379,6 +379,25 @@ namespace rws2016_pdias
                 return prey_name;
             }
 
+            string getNameOfClosestHunter(void)
+            {
+                double hunter_dist = getDistance(*hunter_team->players[0]);
+                string hunter_name = hunter_team->players[0]->name;
+
+                for (size_t i  = 1; i < hunter_team->players.size(); ++i)
+                {
+                    double d = getDistance(*hunter_team->players[i]);
+
+                    if (d < hunter_dist) //A new minimum
+                    {
+                        hunter_dist = d;
+                        hunter_name = hunter_team->players[i]->name;
+                    }
+                }
+
+                return hunter_name;
+            }
+
 
            string getNameOfClosestTeam(boost::shared_ptr<Team> t)
             {
@@ -442,7 +461,8 @@ namespace rws2016_pdias
                 //4. Move maximum displacement towards angle to prey (limited by min, max)
 
                 //Step 1
-                string closest_hunter = getNameOfClosestTeam(hunter_team);
+                string closest_hunter = getNameOfClosestHunter();
+                //string closest_hunter = getNameOfClosestTeam(hunter_team);
                 //string closest_hunter = getNameOfClosestTeamBelowDistance(hunter_team,1.5);
                 ROS_INFO("Closest hunter is %s", closest_hunter.c_str());
 
@@ -450,7 +470,7 @@ namespace rws2016_pdias
                 double distance_hunter = getDistance(closest_hunter);
 
 
-                if (distance_hunter<1.5 )//&& previous_hunter==closest_hunter)
+                if (distance_hunter<1.0 )//&& previous_hunter==closest_hunter)
                 {
                     angle = angle_hunter;
                     displacement = -msg.cheetah;
@@ -467,8 +487,8 @@ namespace rws2016_pdias
 
 
 
-                //string closest_prey = getNameOfClosestPrey();
-                string closest_prey = getNameOfClosestTeam(prey_team);
+                string closest_prey = getNameOfClosestPrey();
+                //string closest_prey = getNameOfClosestTeam(prey_team);
                 //string closest_prey = getNameOfClosestTeamBelowDistance(prey_team,1.0);
                 ROS_INFO("Closest prey is %s", closest_prey.c_str());
 
