@@ -406,12 +406,13 @@ namespace rws2016_pdias
                      {
                          double d = getDistance(*t->players[i]);
 
+                         if (d<th)
+                             return prey_name;
+
                          if (d < prey_dist) //A new minimum
                          {
                              prey_dist = d;
                              prey_name = t->players[i]->name;
-                             if (d<th)
-                                 return prey_name;
                          }
                      }
 
@@ -449,10 +450,10 @@ namespace rws2016_pdias
                 double distance_hunter = getDistance(closest_hunter);
 
 
-                if (distance_hunter<1.0 && previous_hunter==closest_hunter)
+                if (distance_hunter<1.5 )//&& previous_hunter==closest_hunter)
                 {
-                    angle = angle_hunter + M_PI;
-                    displacement = msg.cheetah;
+                    angle = angle_hunter;
+                    displacement = -msg.cheetah;
 
                     distance2hunter = distance_hunter;
                     previous_hunter = closest_hunter;
@@ -476,7 +477,7 @@ namespace rws2016_pdias
                 double angle_prey = getAngle(closest_prey);
                 //double distance_prey = getDistance(closest_prey);
 
-                if (distance_hunter < 2.0 && distance_hunter > 1.0)
+                /*if (distance_hunter < 2.0 && distance_hunter > 1.0)
                 {
                     angle = angle_hunter + M_PI;
                     displacement = -1.0;
@@ -486,7 +487,7 @@ namespace rws2016_pdias
                     angle = angle_prey + M_PI;
                     displacement = msg.cheetah;
                 }
-                else
+                else*/
                 {
                      angle = angle_prey;
                      displacement = msg.cheetah;
